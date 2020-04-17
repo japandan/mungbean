@@ -1,0 +1,75 @@
+---
+title: "Mungbean Growth"
+author: "Daniel Vogel"
+date: "4/17/2020"
+output: pdf_document
+bibliography: references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Mungbean Sprout Growth
+
+Mungbeans were sprouted in 3 petri dishes at varying temperatures.  The germination%, length, and weight were measured at 24 hour intervals for 5 days.  With this data, we can determine if the temperature had an effect on the growth.  We would also like to determine the ideal temperature of those tested.  The source of the data was @article.
+
+### Temperature & Light Conditions
+
+The 3 temperatures that are being compared are 25&deg;C, 30&deg;C, and Ambient (ranging from 21&deg;C - 31&deg;C).  Seeds were grown at constant temperature by placing them in a controlled incubator.  Seeds were grown in darkness for this set of data.
+
+### Growing Medium
+
+The seeds were grown in petri dishes, placed on a wet tissue used to keep them moist.  There were 10 seeds per sample.  Seeds were soaking in water for 12 hours prior to placing them in the dishes which was determined to be to optimal time.
+
+
+![Germenated Mungbean Seeds in Petri Dishes](Germinated-seeds.png){#id .class width=350 height=450px}
+
+```{r mungbeans, echo=FALSE, message=FALSE}
+#install.packages("tidyverse")
+library(tidyverse)
+library(knitr)
+mungbeans_df<-read.csv("mungbean.csv")
+
+kable(mungbeans_df, caption="measured length & weight")
+
+print("Summary of Data")
+summary(mungbeans_df)
+```
+
+
+## Growth Plot
+```{r growthplot, echo=FALSE}
+
+ggplot(data=mungbeans_df, aes(x=duration, y=length, group=temp)) +
+  geom_line(aes(color=temp, linetype=temp))+
+  geom_point(aes(color=temp)) +
+  labs(title="Plot of Length by Time",x="Time (hours)", y = "Sprout Length (cm)")
+```
+
+## Weight Plot
+```{r weightplot, echo=FALSE}
+ggplot(data=mungbeans_df, aes(x=duration, y=sproutwt, group=temp)) +
+  geom_line(aes(color=temp, linetype=temp))+
+  geom_point(aes(color=temp)) +
+  labs(title="Plot of Fresh Weight by Time",x="Time (hours)", y = "Sprout Weight (g)")
+
+## make a new df that has the temp as columns
+length_df<-mungbeans_df %>% 
+  select(temp, duration, length) %>%
+  pivot_wider(names_from=temp, values_from=length)
+
+## normalize the columns for the 3 temps
+scaled_df <- length_df %>% mutate_at(c("Ambient", "25", "30"), ~(scale(.) %>% as.vector))
+
+kable(length_df, caption="Lengths Compared at 3 Temps")
+kable(scaled_df, caption="Normalized Data")
+
+
+#ggplot(data=mungbeans_df, aes(x=duration, y=sproutdrywt, group=temp)) +
+#  geom_line(aes(color=temp, linetype=temp))+
+#  geom_point(aes(color=temp)) +
+#  labs(title="Plot of Dry Weight by Time",x="Time (hours)", y = "Sprout Weight (g)")
+```
+
+# References
