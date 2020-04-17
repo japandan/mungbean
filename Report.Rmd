@@ -42,7 +42,7 @@ summary(mungbeans_df)
 
 This graph seems to show that the Ambient temperature produced the longest sprouts.  However, the study concluded that the change in length from 24 hours to 120 hours was greatest at 30&deg;C.  Since all were started from seeds, if maximum length was the desired outcome and 0 was your starting length, ambient growing conditions seem fine.
 
-I would like to prove that the study was correct by showing the difference in length from 24 hours -> 120 hours and calculating the %percentage increase at each temp.
+I would like to prove that the study was correct by showing the difference in length from 24 hours -> 120 hours and calculating the %percentage increase at each temp.  To do this, I will change the starting weight in the data to 1 for each sample and we can then calculate the %change from hour 24 until hour 120.
 
 ```{r growthplot, echo=FALSE}
 
@@ -86,5 +86,18 @@ kable(scaled_df, caption="Normalized Data")
 #  geom_point(aes(color=temp)) +
 #  labs(title="Plot of Dry Weight by Time",x="Time (hours)", y = "Sprout Weight (g)")
 ```
+
+# Conclusion
+
+The following is an exerpt from the study @article, the source of my data.  My analysis also showed that temperature was a factor in final weight and 30&deg;C was the best temperature for producing sprouts with the heaviest mass.
+
+>"Temperature effect  on seed germination and  sprout yield in Mung bean: Generally,  sprout  length  and  weight
+>increased  with increasing  duration .  Sprout length  and fresh weights  were  highest  between  96
+>and >120  hours. However, sprout dry weights  were highest between  24 and  48  hours  after setting  the test.
+>The interaction of temperature  and  duration on  sprout  length and  sprout fresh and dry weights were
+>significant. Sprout length increased by 8-folds between 24 and 120 hours at ambient  temperature,
+>9-folds  at  25C >and  13-folds  at 30C. On the other hand sprout fresh weight increased by  4  times  between
+>24 and 120  hours at ambient temperature and the figures were 4.7-folds and 1.7-folds at 25 and 30C, >respectively." 
+
 
 # References
