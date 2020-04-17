@@ -39,6 +39,11 @@ summary(mungbeans_df)
 
 
 ## Growth Plot
+
+This graph seems to show that the Ambient temperature produced the longest sprouts.  However, the study concluded that the change in length from 24 hours to 120 hours was greatest at 30&deg;C.  Since all were started from seeds, if maximum length was the desired outcome and 0 was your starting length, ambient growing conditions seem fine.
+
+I would like to prove that the study was correct by showing the difference in length from 24 hours -> 120 hours and calculating the %percentage increase at each temp.
+
 ```{r growthplot, echo=FALSE}
 
 ggplot(data=mungbeans_df, aes(x=duration, y=length, group=temp)) +
@@ -48,13 +53,19 @@ ggplot(data=mungbeans_df, aes(x=duration, y=length, group=temp)) +
 ```
 
 ## Weight Plot
+
+This plot shows that the 25&deg;C is the optimal temperature to achieve maximum weight. The starting weight was not equal.  It may be necessary to scale these weights so see the a more accurate % increase at the 3 temps. The final weight for the samples grown at 25&deg;C was the greatest but the initial starting weight was the lowest for that sample.  This means the actual weight increase was more than shown on this plot, given equal weight samples.
+
 ```{r weightplot, echo=FALSE}
 ggplot(data=mungbeans_df, aes(x=duration, y=sproutwt, group=temp)) +
   geom_line(aes(color=temp, linetype=temp))+
   geom_point(aes(color=temp)) +
   labs(title="Plot of Fresh Weight by Time",x="Time (hours)", y = "Sprout Weight (g)")
 
+
+## DATA Manipulation required for Analysis
 ## make a new df that has the temp as columns
+
 length_df<-mungbeans_df %>% 
   select(temp, duration, length) %>%
   pivot_wider(names_from=temp, values_from=length)
@@ -63,8 +74,12 @@ length_df<-mungbeans_df %>%
 scaled_df <- length_df %>% mutate_at(c("Ambient", "25", "30"), ~(scale(.) %>% as.vector))
 
 kable(length_df, caption="Lengths Compared at 3 Temps")
-kable(scaled_df, caption="Normalized Data")
+```
 
+At this point, I would like to perform a linear regression test to confirm that 25&deg;C is the best temperature for growing these sprouts.  I think the first step would be to normalize.  I might be able to skip this step if it is not needed to perform the test.
+
+```{r normalize, echo=FALSE}
+kable(scaled_df, caption="Normalized Data")
 
 #ggplot(data=mungbeans_df, aes(x=duration, y=sproutdrywt, group=temp)) +
 #  geom_line(aes(color=temp, linetype=temp))+
